@@ -1,0 +1,37 @@
+name: Update Json Data
+
+on:
+  release:
+    types:
+      - published
+      - 
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout main branch
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+
+      - name: Install dependencies
+        run: |
+          pip install requests
+          pip install bs4
+          pip install slpp
+
+      - name: Run Python script
+        run: |
+          python get_json_from_fandom.py
+
+      - name: Commit and push changes
+        uses: stefanzweifel/git-auto-commit-action@v4
